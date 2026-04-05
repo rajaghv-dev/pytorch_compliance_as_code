@@ -1,0 +1,11 @@
+*.pyc
+__pycache__/
+storage/
+*.egg-info/
+.env
+*.npy
+*.pt
+.claude/
+.pytest_cache/
+mlflow.db
+mlruns/

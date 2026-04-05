@@ -1,0 +1,104 @@
+# =============================================================================
+# PyTorch Compliance Toolkit — Default Configuration
+# =============================================================================
+# This file contains the full default settings for the compliance evidence
+# extraction pipeline.  Copy and customise for your own runs.
+
+# Path to the local PyTorch repository clone.
+repo_path: /home/raja/gemini-torch/pytorch
+
+# Path to the directory containing legal reference documents (EU AI Act, GDPR, etc.).
+legal_path: /home/raja/compliance-as-code/pytorch_compliance_toolkit/data/legal
+
+# Root directory where all pipeline output (JSON, RDF, CSV, notebooks) is stored.
+output_path: ./storage
+
+# Pipeline phases to execute, in order.
+#   catalog  — enumerate every source file and build a file manifest
+#   extract  — run enabled extractors to produce EntityRecords
+#   annotate — enrich records with compliance annotations
+#   organize — merge, deduplicate, and structure the record set
+#   convert  — emit final artefacts (RDF, Markdown, CSV, notebooks, talk assets)
+phases:
+  - catalog
+  - extract
+  - annotate
+  - organize
+  - convert
+
+# Number of parallel workers.  1 = single-threaded (safest); N>1 = multiprocessing.
+workers: 1
+
+# ---------------------------------------------------------------------------
+# LLM integration (Ollama-based local inference)
+# ---------------------------------------------------------------------------
+llm:
+  # Master switch — set to false to run the pipeline without any LLM calls.
+  enabled: true
+
+  # Base URL of the Ollama server.
+  ollama_url: http://localhost:11434
+
+  # Model identifiers for each LLM-powered stage.
+  models:
+    # qwen3.5:35b: strongest reasoning for cross-article dependency chains
+    mapping_validator: "qwen3.5:35b"
+
+    # qwen3.5:27b: strong structured extraction on dense legal text
+    legal_parser: "qwen3.5:27b"
+
+    # nomic-embed-text: purpose-built embedding model, fastest local option
+    semantic_search: nomic-embed-text
+
+    # qwen3.5:27b: strong reasoning for compliance Q&A
+    rag_answerer: "qwen3.5:27b"
+
+    # qwen3-coder:30b: code-aware model for commit classification
+    commit_classifier: "qwen3-coder:30b"
+
+    # Two-stage C++ summarisation: stage1 extracts structure, stage2 refines prose
+    cpp_translator_stage1: "qwen3-coder:30b"
+    cpp_translator_stage2: "qwen3.5:35b"
+
+  # Whether to use REBEL-large for relation extraction from docstrings.
+  rebel_large: true
+
+# ---------------------------------------------------------------------------
+# Extractors
+# ---------------------------------------------------------------------------
+extractors:
+  enabled:
+    - hookability            # hook registration points (register_hook, etc.)
+    - operator_determinism   # deterministic / non-deterministic operator tagging
+    - export_boundary        # torch.export / TorchScript boundary analysis
+    - data_provenance        # dataset loading, transform chains
+    - module_hierarchy       # nn.Module inheritance tree
+    - supply_chain           # third-party dependencies and licenses
+    - api_documentation      # public API docstrings and signatures
+    - sphinx_notes           # Sphinx rst directives (.. warning::, .. note::, etc.)
+    - test_suite             # test file analysis and coverage hints
+    - compliance_tools       # compliance-specific utilities in the repo
+    - commit_history         # git log analysis for compliance-relevant changes
+
+# ---------------------------------------------------------------------------
+# Annotators
+# ---------------------------------------------------------------------------
+annotators:
+  enabled:
+    - compliance_tagger      # map entities to EU AI Act / GDPR articles
+    - dispatcher_level       # Python / C++ / CUDA dispatch level tagging
+    - distributed_safety     # distributed training safety annotations
+    - lifecycle              # training / inference / export lifecycle phase
+    - export_survival        # which entities survive torch.export
+    - confidence             # confidence scoring for all annotations
+    - hook_consumers         # downstream consumers of hook points
+
+# ---------------------------------------------------------------------------
+# Output formats
+# ---------------------------------------------------------------------------
+outputs:
+  rdf: true           # RDF/Turtle knowledge graph
+  markdown: true       # human-readable Markdown reports
+  csv: true            # flat CSV for spreadsheet analysis
+  notebook: true       # Jupyter notebooks with embedded visualisations
+  talk_assets: true    # PowerPoint / PDF assets for presentations

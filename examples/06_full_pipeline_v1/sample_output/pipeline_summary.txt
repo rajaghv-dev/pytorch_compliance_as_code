@@ -1,0 +1,19 @@
+
+╔══════════════════════════════════════════════════════════════╗
+║            COMPLIANCE PIPELINE SUMMARY                       ║
+╠══════════════════════════════════════════════════════════════╣
+║  Model:         DistilBERT (66M params)                      ║
+║  Dataset:       IMDB (200 reviews)                           ║
+║  Hardware:      CUDA                                          ║
+║  Regulations:   EU AI Act, GDPR                              ║
+║                                                              ║
+║  Audit Trail:   13936 entries  |  Chain: ✅ VALID              ║
+║  Fairness:      Parity 0.023  |  ✅ PASSED                  ║
+║  Consent:       190   granted  |  10    denied               ║
+║  Captum:        3 explanations logged                        ║
+║                                                              ║
+║  Report:        compliance_report.pdf                        ║
+║  Pipeline Time: 19.2  s                              ║
+║                                                              ║
+║  Status:        READY FOR REGULATORY REVIEW ✅               ║
+╚══════════════════════════════════════════════════════════════╝

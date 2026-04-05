@@ -1,0 +1,26 @@
+# export_gaps.rq
+# Find entities that are compliance-tagged but do NOT survive a given export format.
+# This helps identify gaps where compliance evidence is lost at the export boundary.
+#
+# Change the FILTER to focus on a specific export format:
+#   ptc:survivesONNX, ptc:survivesEP, ptc:survivesTS, ptc:survivesCompile, ptc:survivesDCP
+
+PREFIX ptc: <https://pytorch-compliance.org/ontology#>
+PREFIX eu:  <https://eu-ai-act.org/ontology#>
+
+SELECT ?entity ?name ?article ?sourceFile
+WHERE {
+    ?entity ptc:entityName  ?name ;
+            ptc:sourceFile  ?sourceFile ;
+            ptc:implements  ?article .
+
+    # Entity must have export survival data.
+    ?entity ptc:survives ?format .
+
+    # Filter to entities that do NOT survive torch.compile.
+    FILTER NOT EXISTS { ?entity ptc:survives ptc:TorchCompile }
+
+    # Only EU AI Act articles (not GDPR).
+    FILTER(STRSTARTS(STR(?article), STR(eu:)))
+}
+ORDER BY ?article ?name

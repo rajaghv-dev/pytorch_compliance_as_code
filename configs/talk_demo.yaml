@@ -1,0 +1,55 @@
+# =============================================================================
+# PyTorch Compliance Toolkit — Talk Demo Configuration
+# =============================================================================
+# Minimal configuration for a live demo.  Runs a small subset of extractors
+# and annotators with LLM disabled for fast, reproducible output.
+
+repo_path: /home/raja/gemini-torch/pytorch
+legal_path: /home/raja/compliance-as-code/pytorch_compliance_toolkit/data/legal
+output_path: ./storage
+
+# Run all five phases end-to-end.
+phases:
+  - catalog
+  - extract
+  - annotate
+  - organize
+  - convert
+
+workers: 1
+
+# LLM disabled for offline / fast demo runs.
+llm:
+  enabled: false
+  ollama_url: http://localhost:11434
+  models:
+    mapping_validator: phi4
+    legal_parser: mistral-nemo
+    semantic_search: nomic-embed-text
+    rag_answerer: llama3.1
+    commit_classifier: "qwen2.5-coder:7b"
+    cpp_translator_stage1: "qwen2.5-coder:7b"
+    cpp_translator_stage2: "qwen2.5:14b"
+  rebel_large: false
+
+# Only three extractors for speed.
+extractors:
+  enabled:
+    - hookability
+    - operator_determinism
+    - export_boundary
+
+# Only three annotators for speed.
+annotators:
+  enabled:
+    - compliance_tagger
+    - lifecycle
+    - export_survival
+
+# All output formats enabled so the audience can see every artefact.
+outputs:
+  rdf: true
+  markdown: true
+  csv: true
+  notebook: true
+  talk_assets: true

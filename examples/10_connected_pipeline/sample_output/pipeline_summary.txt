@@ -1,0 +1,3 @@
+Pipeline completed in 5.5s
+Opacus: True | Captum: True | CrypTen: ✅
+Audit: 108 entries | Parity: 0.061 | Consent: {'granted': 450, 'denied': 50}

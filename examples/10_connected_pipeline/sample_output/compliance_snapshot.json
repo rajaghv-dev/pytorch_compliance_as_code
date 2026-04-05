@@ -1,0 +1,11 @@
+{
+  "run_id": "connected_pipeline_demo",
+  "audit_root_hash": "f61d14289ea2de040814e474e634d57046f78bc12d2ab671711cfc7b8c732d4a",
+  "audit_entries": 108,
+  "fairness_parity": 0.06111109256744385,
+  "fairness_passed": true,
+  "epsilon": 4.694858375198232,
+  "delta": 1e-05,
+  "drift_detected": false,
+  "accuracy": null
+}

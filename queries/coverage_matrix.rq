@@ -1,0 +1,20 @@
+# coverage_matrix.rq
+# Count compliance entities per EU AI Act article.
+# Run against storage/rdf/compliance.ttl
+#
+# Expected result: one row per article, ordered by entity count descending.
+# Low counts indicate coverage gaps that need manual evidence collection.
+
+PREFIX ptc:  <https://pytorch-compliance.org/ontology#>
+PREFIX pcti: <https://pytorch-compliance.org/instance#>
+PREFIX eu:   <https://eu-ai-act.org/ontology#>
+PREFIX gdpr: <https://gdpr.org/ontology#>
+
+SELECT ?article (COUNT(DISTINCT ?entity) AS ?entityCount)
+       (AVG(?mappingConf) AS ?avgConfidence)
+WHERE {
+    ?entity ptc:implements       ?article ;
+            ptc:mappingConfidence ?mappingConf .
+}
+GROUP BY ?article
+ORDER BY DESC(?entityCount)

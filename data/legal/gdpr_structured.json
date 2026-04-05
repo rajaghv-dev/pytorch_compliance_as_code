@@ -1,0 +1,188 @@
+{
+  "metadata": {
+    "title": "GDPR (Regulation 2016/679)",
+    "effective_date": "2018-05-25",
+    "source": "EUR-Lex",
+    "url": "https://eur-lex.europa.eu/eli/reg/2016/679/oj",
+    "purpose": "Protection of natural persons with regard to the processing of personal data"
+  },
+  "document_structure": {
+    "chapters": [
+      {
+        "chapter": 1,
+        "title": "General Provisions",
+        "file_path": "data/legal/gdpr/chapters/01_general_provisions.md",
+        "description": "Articles 1-4: Subject-matter, Scope, Definitions"
+      },
+      {
+        "chapter": 2,
+        "title": "Principles",
+        "file_path": "data/legal/gdpr/chapters/02_principles.md",
+        "description": "Articles 5-11: Lawful processing, conditions for consent, special categories"
+      },
+      {
+        "chapter": 3,
+        "title": "Rights of the Data Subject",
+        "file_path": "data/legal/gdpr/chapters/03_data_subject_rights.md",
+        "description": "Articles 12-23: Access, rectification, erasure, portability, objection"
+      },
+      {
+        "chapter": 4,
+        "title": "Controller and Processor",
+        "file_path": "data/legal/gdpr/chapters/04_controller_processor.md",
+        "description": "Articles 24-39: Responsibilities, security, breach notification, DPIA"
+      },
+      {
+        "chapter": 5,
+        "title": "Transfers",
+        "file_path": "data/legal/gdpr/chapters/05_transfers.md",
+        "description": "Articles 44-50: Transfers to third countries"
+      }
+    ],
+    "annexes": []
+  },
+  "key_articles": [
+    {
+      "number": "5",
+      "title": "Principles",
+      "file_path": "data/legal/gdpr/chapters/02_principles.md",
+      "key_points": [
+        "Lawfulness, fairness, transparency",
+        "Purpose limitation",
+        "Data minimisation",
+        "Accuracy",
+        "Storage limitation",
+        "Integrity and confidentiality",
+        "Accountability"
+      ],
+      "obligations": ["compliance", "data_governance"]
+    },
+    {
+      "number": "6",
+      "title": "Lawfulness of processing",
+      "file_path": "data/legal/gdpr/chapters/02_principles.md",
+      "key_points": [
+        "Consent",
+        "Contract performance",
+        "Legal obligation",
+        "Vital interests",
+        "Public task",
+        "Legitimate interests"
+      ],
+      "obligations": ["legal_basis", "documentation"]
+    },
+    {
+      "number": "9",
+      "title": "Special categories",
+      "file_path": "data/legal/gdpr/chapters/02_principles.md",
+      "key_points": [
+        "Biometric data",
+        "Health data",
+        "Political opinions",
+        "Religious beliefs",
+        "Requires explicit consent"
+      ],
+      "obligations": ["explicit_consent", "special_handling"]
+    },
+    {
+      "number": "15",
+      "title": "Right of access",
+      "file_path": "data/legal/gdpr/chapters/03_data_subject_rights.md",
+      "key_points": [
+        "Confirmation of processing",
+        "Copy of personal data",
+        "Purpose of processing",
+        "Categories of data",
+        "Recipients"
+      ],
+      "obligations": ["information_provision", "data_access"]
+    },
+    {
+      "number": "17",
+      "title": "Right to erasure",
+      "file_path": "data/legal/gdpr/chapters/03_data_subject_rights.md",
+      "key_points": [
+        "Withdraw consent",
+        "Data no longer necessary",
+        "Object to processing",
+        "Unlawful processing",
+        "Erasure for compliance"
+      ],
+      "obligations": ["data_deletion", "right_to_forgotten"]
+    },
+    {
+      "number": "22",
+      "title": "Automated decision-making",
+      "file_path": "data/legal/gdpr/chapters/03_data_subject_rights.md",
+      "key_points": [
+        "Right not to be subject to automated decisions",
+        "Includes profiling",
+        "Rights to human intervention",
+        "Right to challenge decisions"
+      ],
+      "obligations": ["human_oversight", "explanation"]
+    },
+    {
+      "number": "25",
+      "title": "Data protection by design",
+      "file_path": "data/legal/gdpr/chapters/04_controller_processor.md",
+      "key_points": [
+        "Pseudonymisation",
+        "Data minimisation",
+        "Encryption",
+        "Technical safeguards"
+      ],
+      "obligations": ["privacy_by_design", "technical_measures"]
+    },
+    {
+      "number": "32",
+      "title": "Security of processing",
+      "file_path": "data/legal/gdpr/chapters/04_controller_processor.md",
+      "key_points": [
+        "Pseudonymisation and encryption",
+        "Confidentiality, integrity",
+        "Resilience of systems",
+        "Timely restoration",
+        "Regular testing"
+      ],
+      "obligations": ["security_measures", "testing"]
+    },
+    {
+      "number": "33",
+      "title": "Breach notification",
+      "file_path": "data/legal/gdpr/chapters/04_controller_processor.md",
+      "key_points": [
+        "Notify supervisory authority within 72 hours",
+        "Document the breach"
+      ],
+      "obligations": ["incident_reporting", "documentation"]
+    },
+    {
+      "number": "35",
+      "title": "Data protection impact assessment",
+      "file_path": "data/legal/gdpr/chapters/04_controller_processor.md",
+      "key_points": [
+        "Required for high-risk processing",
+        "Systematic evaluation",
+        "Large-scale processing",
+        "Profiling"
+      ],
+      "obligations": ["risk_assessment", "prior_consultation"]
+    }
+  ],
+  "penalties": {
+    "maximum": "EUR 20,000,000 or 4% of global annual turnover",
+    "categories": "administrative_fines",
+    "note": "Whichever is higher"
+  },
+  "raw_text_sources": {
+    "main_document": "data/legal/gdpr_summary.md",
+    "chapter_files": [
+      "data/legal/gdpr/chapters/01_general_provisions.md",
+      "data/legal/gdpr/chapters/02_principles.md",
+      "data/legal/gdpr/chapters/03_data_subject_rights.md",
+      "data/legal/gdpr/chapters/04_controller_processor.md",
+      "data/legal/gdpr/chapters/05_transfers.md"
+    ]
+  }
+}

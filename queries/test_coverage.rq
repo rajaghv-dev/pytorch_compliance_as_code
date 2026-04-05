@@ -1,0 +1,17 @@
+# test_coverage.rq
+# For each EU AI Act article, count how many test entities implement it.
+# A low count indicates untested compliance obligations — a gap under Art.9
+# (risk management requires testing evidence).
+
+PREFIX ptc: <https://pytorch-compliance.org/ontology#>
+PREFIX eu:  <https://eu-ai-act.org/ontology#>
+
+SELECT ?article (COUNT(DISTINCT ?testEntity) AS ?testCount)
+WHERE {
+    ?testEntity a             ptc:TestCase ;
+                ptc:implements ?article .
+
+    FILTER(STRSTARTS(STR(?article), STR(eu:)))
+}
+GROUP BY ?article
+ORDER BY ?article

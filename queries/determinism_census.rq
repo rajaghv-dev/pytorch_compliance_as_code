@@ -1,0 +1,21 @@
+# determinism_census.rq
+# List all operators and their determinism classification.
+# Art. 9 (Risk Management) and Art. 15 (Accuracy/Robustness) require
+# operators to have documented determinism properties.
+#
+# Determinism values: deterministic | non_deterministic | conditionally_deterministic
+
+PREFIX ptc: <https://pytorch-compliance.org/ontology#>
+PREFIX eu:  <https://eu-ai-act.org/ontology#>
+
+SELECT ?name ?determinism ?sourceFile
+       ?extractionConf ?mappingConf
+WHERE {
+    ?entity ptc:entityName         ?name ;
+            ptc:hasDeterminism     ?determinism ;
+            ptc:sourceFile         ?sourceFile .
+
+    OPTIONAL { ?entity ptc:extractionConfidence ?extractionConf }
+    OPTIONAL { ?entity ptc:mappingConfidence    ?mappingConf }
+}
+ORDER BY ?determinism ?name

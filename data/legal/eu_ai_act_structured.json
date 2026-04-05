@@ -1,0 +1,210 @@
+{
+  "metadata": {
+    "title": "EU AI Act (Regulation 2024/1689)",
+    "effective_date": "2024-07-12",
+    "source": "EUR-Lex",
+    "url": "https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng",
+    "purpose": "Harmonised rules on artificial intelligence"
+  },
+  "document_structure": {
+    "chapters": [
+      {
+        "chapter": 1,
+        "title": "Preamble",
+        "file_path": "data/legal/eu_ai_act/chapters/01_preamble.md",
+        "description": "Recitals and Whereas clauses"
+      },
+      {
+        "chapter": 2,
+        "title": "General Provisions",
+        "file_path": "data/legal/eu_ai_act/chapters/02_general_provisions.md",
+        "description": "Articles 1-4: Subject-matter, Scope, Definitions, Annexes"
+      },
+      {
+        "chapter": 3,
+        "title": "Prohibited Practices",
+        "file_path": "data/legal/eu_ai_act/chapters/03_prohibited_practices.md",
+        "description": "Articles 5-7: Prohibited AI practices, Exceptions, Penalties"
+      },
+      {
+        "chapter": 4,
+        "title": "High-Risk AI Systems",
+        "file_path": "data/legal/eu_ai_act/chapters/04_high_risk_systems.md",
+        "description": "Articles 8-20: Requirements for high-risk systems"
+      },
+      {
+        "chapter": 5,
+        "title": "Obligations of Providers and Deployers",
+        "file_path": "data/legal/eu_ai_act/chapters/05_obligations.md",
+        "description": "Articles 21-28: Provider, Deployer, Distributor obligations"
+      },
+      {
+        "chapter": 6,
+        "title": "Transparency Obligations",
+        "file_path": "data/legal/eu_ai_act/chapters/06_transparency.md",
+        "description": "Article 50: Transparency for certain AI systems"
+      },
+      {
+        "chapter": 7,
+        "title": "Measures in Support of Innovation",
+        "file_path": "data/legal/eu_ai_act/chapters/07_innovation.md",
+        "description": "Articles 56-58: Regulatory sandboxes"
+      }
+    ],
+    "annexes": [
+      {
+        "annex": "I",
+        "title": "Union harmonisation legislation",
+        "description": "List of product legislation that applies to AI systems as safety components"
+      },
+      {
+        "annex": "II",
+        "title": "High-risk systems",
+        "description": "Detailed list of high-risk AI systems under Union harmonisation legislation"
+      },
+      {
+        "annex": "III",
+        "title": "High-risk AI systems",
+        "description": "AI systems falling within specific areas (biometrics, critical infrastructure, education, employment, etc.)"
+      },
+      {
+        "annex": "IV",
+        "title": "Technical documentation",
+        "description": "Required documentation for high-risk AI systems"
+      },
+      {
+        "annex": "V",
+        "title": "Conformity assessment",
+        "description": "Procedures for demonstrating compliance"
+      }
+    ]
+  },
+  "articles": [
+    {
+      "number": "1",
+      "title": "Subject-matter",
+      "file_path": "data/legal/eu_ai_act/chapters/02_general_provisions.md",
+      "key_points": [
+        "Harmonised rules for placing AI systems on the market",
+        "Rules for high-risk AI systems",
+        "Rules for general-purpose AI models"
+      ],
+      "obligations": ["compliance", "market_registration"]
+    },
+    {
+      "number": "5",
+      "title": "Prohibited practices",
+      "file_path": "data/legal/eu_ai_act/chapters/03_prohibited_practices.md",
+      "key_points": [
+        "Subliminal techniques to distort behavior (prohibited)",
+        "Exploitation of vulnerabilities (prohibited)",
+        "Social scoring by public authorities (prohibited)",
+        "Real-time remote biometric identification (prohibited with exceptions)"
+      ],
+      "obligations": ["complete_prohibition", "limited_exceptions"]
+    },
+    {
+      "number": "9",
+      "title": "Requirements for high-risk AI systems",
+      "file_path": "data/legal/eu_ai_act/chapters/04_high_risk_systems.md",
+      "key_points": [
+        "Risk management system",
+        "Data governance and data quality",
+        "Technical documentation",
+        "Record-keeping",
+        "Transparency",
+        "Human oversight",
+        "Accuracy, robustness, and cybersecurity"
+      ],
+      "obligations": ["documentation", "oversight", "technical_requirements"]
+    },
+    {
+      "number": "10",
+      "title": "Risk management system",
+      "file_path": "data/legal/eu_ai_act/chapters/04_high_risk_systems.md",
+      "key_points": [
+        "Continuous iterative process",
+        "Run throughout entire lifecycle",
+        "Identify and mitigate risks",
+        "Document risk management activities"
+      ],
+      "obligations": ["risk_assessment", "documentation", "continuous_monitoring"]
+    },
+    {
+      "number": "21",
+      "title": "Obligations of providers",
+      "file_path": "data/legal/eu_ai_act/chapters/05_obligations.md",
+      "key_points": [
+        "Ensure compliance with Title II requirements",
+        "Draw up technical documentation",
+        "Conduct conformity assessment",
+        "Affix CE marking",
+        "Draw up EU declaration of conformity"
+      ],
+      "obligations": ["compliance", "certification", "declaration"]
+    },
+    {
+      "number": "22",
+      "title": "Obligations of deployers",
+      "file_path": "data/legal/eu_ai_act/chapters/05_obligations.md",
+      "key_points": [
+        "Use according to instructions",
+        "Assign human overseers",
+        "Monitor operation",
+        "Report incidents"
+      ],
+      "obligations": ["proper_use", "oversight", "monitoring", "reporting"]
+    },
+    {
+      "number": "50",
+      "title": "Transparency obligations",
+      "file_path": "data/legal/eu_ai_act/chapters/06_transparency.md",
+      "key_points": [
+        "Inform users of AI interaction",
+        "Mark AI-generated content",
+        "Disclose artificial content generation",
+        "Machine-readable format for marking"
+      ],
+      "obligations": ["user_disclosure", "content_marking", "transparency"]
+    },
+    {
+      "number": "56",
+      "title": "Regulatory sandboxes",
+      "file_path": "data/legal/eu_ai_act/chapters/07_innovation.md",
+      "key_points": [
+        "Establish AI regulatory sandboxes",
+        "Enable testing under controlled conditions",
+        "Support innovation",
+        "Ensure compliance during testing"
+      ],
+      "obligations": ["innovation_support", "controlled_testing", "compliance_during_test"]
+    }
+  ],
+  "high_risk_areas": [
+    "Biometric identification and categorisation",
+    "Critical infrastructure management",
+    "Education and vocational training",
+    "Employment and worker management",
+    "Access to essential public and private services",
+    "Law enforcement",
+    "Migration and border control",
+    "Administration of justice"
+  ],
+  "penalties": {
+    "maximum": "EUR 35,000,000 or 6% of worldwide annual turnover",
+    "categories": "administrative_fines",
+    "note": "Member States shall lay down detailed rules"
+  },
+  "raw_text_sources": {
+    "main_document": "data/legal/eu_ai_act.md",
+    "chapter_files": [
+      "data/legal/eu_ai_act/chapters/01_preamble.md",
+      "data/legal/eu_ai_act/chapters/02_general_provisions.md",
+      "data/legal/eu_ai_act/chapters/03_prohibited_practices.md",
+      "data/legal/eu_ai_act/chapters/04_high_risk_systems.md",
+      "data/legal/eu_ai_act/chapters/05_obligations.md",
+      "data/legal/eu_ai_act/chapters/06_transparency.md",
+      "data/legal/eu_ai_act/chapters/07_innovation.md"
+    ]
+  }
+}

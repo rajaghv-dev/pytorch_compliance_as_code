@@ -1,0 +1,657 @@
+=== 01_audit_trail ===
+Skipping import of cpp extensions due to incompatible torch version 2.11.0+cu130 for torchao version 0.16.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+======================================================================
+EXAMPLE 1: Immutable Audit Trail — EU AI Act Article 12
+Model: DistilBERT (66M params)
+======================================================================
+
+Device: CUDA
+
+Loading DistilBERT sentiment model…
+Loading weights:   0%|          | 0/104 [00:00<?, ?it/s]Loading weights: 100%|██████████| 104/104 [00:00<00:00, 1658.39it/s]
+Model loaded.
+  (using `with engine` context manager — hooks removed automatically on exit)
+
+Running inference on 10 reviews with audit hooks active…
+
+  'This film is an absolute masterpiece. Every scene …' → POSITIVE (100.0%)
+  'A complete waste of time. The plot made no sense w…' → NEGATIVE (100.0%)
+  'Brilliant performances from the entire cast. Highl…' → POSITIVE (100.0%)
+  'The worst movie I have seen in years. Terrible scr…' → NEGATIVE (100.0%)
+  'An emotional rollercoaster that left me speechless…' → POSITIVE (96.8%)
+  'Mediocre at best. Nothing new or interesting to of…' → NEGATIVE (100.0%)
+  'A stunning visual experience with a deeply moving …' → POSITIVE (100.0%)
+  'Painfully boring and predictable. I fell asleep ha…' → NEGATIVE (100.0%)
+  'One of the finest films ever made. A true cinemati…' → POSITIVE (100.0%)
+  'Disappointing sequel that fails to capture the ori…' → NEGATIVE (100.0%)
+
+Audit chain: 670 entries
+  = 10 forward passes × 67 DistilBERT modules each
+  Unique operator types: 5
+
+Operator Type                  | Count
+--------------------------------------
+  Linear                       |   380
+  LayerNorm                    |   130
+  Dropout                      |    80
+  GELUActivation               |    60
+  Embedding                    |    20
+
+Entry  | Module                                   | Type           | Out Shape        | OutHash    | ChainHash
+--------------------------------------------------------------------------------------------------------------
+  #0    | distilbert.embeddings.word_embeddings    | Embedding      | (1, 15, 768)     | f4afe569…  | 5fca3d17…
+  #1    | distilbert.embeddings.position_embedding | Embedding      | (1, 15, 768)     | 02368a6c…  | f1701851…
+  #2    | distilbert.embeddings.LayerNorm          | LayerNorm      | (1, 15, 768)     | b003ee2b…  | 6b9c40a4…
+  #167  | distilbert.transformer.layer.2.output_la | LayerNorm      | (1, 12, 768)     | 9c9c9cdd…  | 8512341c…
+  #335  | distilbert.embeddings.word_embeddings    | Embedding      | (1, 17, 768)     | 3eedc745…  | 7be53c00…
+
+  output_hash = SHA-256[:16] of the tensor values at that layer
+  Modifying output post-hoc would change output_hash → break chain.verify()
+
+Verifying chain integrity…
+✅ CHAIN VALID — all 670 hashes verified
+   Root hash (chain fingerprint): b77e9f0a02a120770f0b92a37fad51e4444434f8f2c55ecffa30edc844919b0c
+   → Include this in regulatory filings; any tampering changes it.
+
+Simulating tampering — modifying entry #5 output_hash (as if output values changed)…
+❌ INTEGRITY VIOLATION at entry #5 — hash mismatch!
+   The chain bound the output tensor values, not just metadata.
+
+Audit chain persisted → /home/raja/compliance-as-code/pytorch_compliance_as_code/examples/01_audit_trail/sample_output/audit_chain.jsonl  (1,399,360 bytes)
+  Each line = one AuditEntry | append-only | survives process exit
+
+Visualization saved → /home/raja/compliance-as-code/pytorch_compliance_as_code/examples/01_audit_trail/sample_output/audit_waterfall.png
+
+Total elapsed: 5.3s
+
+=== 02_fairness_gate ===
+/home/raja/compliance-as-code/pytorch_compliance_as_code/examples/02_fairness_gate/run.py:226: UserWarning: Glyph 10060 (\N{CROSS MARK}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/raja/compliance-as-code/pytorch_compliance_as_code/examples/02_fairness_gate/run.py:231: UserWarning: Glyph 10060 (\N{CROSS MARK}) missing from font(s) DejaVu Sans.
+  plt.savefig(out_path, dpi=120, bbox_inches="tight")
+======================================================================
+EXAMPLE 2: Fairness Gate — EU AI Act Article 10 (Data Governance)
+======================================================================
+
+Epoch  |     Loss |   Parity |  EqOdds TPR |  EqOdds FPR | Status
+-----------------------------------------------------------------
+  1     |    0.533 |    0.137 |       0.016 |       0.062 | ❌ BLOCKED
+     ComplianceViolation: parity 0.137 > threshold 0.1
+     Equalized odds gap — TPR: 0.016, FPR: 0.062
+     (Training continues for visualization — in production the pipeline would halt here)
+          (continuing remaining epochs to show trajectory)
+  2     |    0.407 |    0.147 |       0.005 |       0.027 | ❌ BLOCKED
+  3     |    0.381 |    0.163 |       0.005 |       0.021 | ❌ BLOCKED
+  4     |    0.363 |    0.157 |       0.005 |       0.021 | ❌ BLOCKED
+  5     |    0.334 |    0.167 |       0.012 |       0.014 | ❌ BLOCKED
+  6     |    0.349 |    0.180 |       0.013 |       0.014 | ❌ BLOCKED
+  7     |    0.335 |    0.177 |       0.001 |       0.014 | ❌ BLOCKED
+  8     |    0.305 |    0.160 |       0.003 |       0.000 | ❌ BLOCKED
+
+Fairness log:
+  Epoch  |  Disparity |  Threshold | Status
+  --------------------------------------------
+  1      |     0.1367 |     0.1000 | BLOCKED
+  2      |     0.1467 |     0.1000 | BLOCKED
+  3      |     0.1633 |     0.1000 | BLOCKED
+  4      |     0.1567 |     0.1000 | BLOCKED
+  5      |     0.1667 |     0.1000 | BLOCKED
+  6      |     0.1800 |     0.1000 | BLOCKED
+  7      |     0.1767 |     0.1000 | BLOCKED
+  8      |     0.1600 |     0.1000 | BLOCKED
+
+Visualization saved → /home/raja/compliance-as-code/pytorch_compliance_as_code/examples/02_fairness_gate/sample_output/fairness_trajectory.png
+Total elapsed: 2.7s
+
+=== 03_captum_explain ===
+Skipping import of cpp extensions due to incompatible torch version 2.11.0+cu130 for torchao version 0.16.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+======================================================================
+EXAMPLE 3: Model Explainability — EU AI Act Article 13 (Transparency)
+Model: DistilBERT (66M params) | Captum IntegratedGradients
+======================================================================
+
+Device: CUDA
+Loading weights:   0%|          | 0/104 [00:00<?, ?it/s]Loading weights: 100%|██████████| 104/104 [00:00<00:00, 3068.56it/s]
+
+Note: Attribution baseline = zero embedding vector (padding-token equivalent).
+      Scores are relative to this reference, not an absolute importance measure.
+
+----------------------------------------------------------------------
+
+Review: 'This film is absolutely stunning. A true masterpiece of cine…'
+  Prediction: POSITIVE (100.0%)
+  Attribution (for predicted class=1):
+    'stunning' (+1.163)  'absolutely' (+0.732)  'masterpiece' (+0.587)  'cinema' (+0.525)  'true' (+0.365)
+
+Review: 'Terrible movie, boring plot, awful acting. Complete waste of…'
+  Prediction: NEGATIVE (100.0%)
+  Attribution (for predicted class=0):
+    'waste' (+0.554)  'time' (+0.270)  'awful' (+0.253)  'boring' (+0.244)  'movie' (+0.234)
+
+Review: 'An emotional and uplifting story. I laughed and cried throug…'
+  Prediction: POSITIVE (100.0%)
+  Attribution (for predicted class=1):
+    'an' (+1.314)  '##lifting' (+1.119)  'emotional' (+0.931)  'story' (+0.616)  'and' (+0.526)
+
+Review: 'Dull and predictable. The director showed no creative vision…'
+  Prediction: NEGATIVE (100.0%)
+  Attribution (for predicted class=0):
+    'no' (+0.856)  'dull' (+0.495)  '.' (+0.395)  'showed' (+0.377)  'vision' (+0.344)
+
+Review: 'Magnificent cinematography and a gripping narrative. Must wa…'
+  Prediction: POSITIVE (100.0%)
+  Attribution (for predicted class=1):
+    'gripping' (+1.151)  'narrative' (+0.824)  'magnificent' (+0.765)  'a' (+0.501)  '.' (+0.486)
+----------------------------------------------------------------------
+
+Attributions persisted → /home/raja/compliance-as-code/pytorch_compliance_as_code/examples/03_captum_explain/sample_output/attribution_log.jsonl  (5 records)
+  Each record: input_hash, predicted class, top-5 tokens + scores, timestamp
+
+Visualization 1 saved → /home/raja/compliance-as-code/pytorch_compliance_as_code/examples/03_captum_explain/sample_output/captum_attribution.png
+Visualization 2 saved → /home/raja/compliance-as-code/pytorch_compliance_as_code/examples/03_captum_explain/sample_output/attribution_heatmap.png
+
+Total elapsed: 4.5s
+
+=== 04_opacus_dp ===
+/home/raja/.venv/lib/python3.12/site-packages/opacus/privacy_engine.py:96: UserWarning: Secure RNG turned off. This is perfectly fine for experimentation as it allows for much faster training performance, but remember to turn it on and retrain one last time before production with ``secure_mode`` turned on.
+  warnings.warn(
+/home/raja/.venv/lib/python3.12/site-packages/opacus/accountants/analysis/rdp.py:332: UserWarning: Optimal order is the largest alpha. Please consider expanding the range of alphas to get a tighter privacy bound.
+  warnings.warn(
+sys:1: UserWarning: Full backward hook is firing when gradients are computed with respect to module outputs since no inputs require gradients. See https://docs.pytorch.org/docs/main/generated/torch.nn.Module.html#torch.nn.Module.register_full_backward_hook for more details.
+======================================================================
+EXAMPLE 4: Differential Privacy — GDPR Article 25 (Privacy by Design)
+Model: Small CNN | Dataset: CIFAR-10 (5000 samples) | Opacus DP-SGD
+======================================================================
+
+Device: CUDA
+
+⚠️  Note: ε=50.0 does NOT constitute strong privacy.
+   For GDPR Art.25 compliance, ε ≤ 8 is recommended (ε ≤ 1 is strong).
+   This demo uses ε=50.0 for convergence speed on a small dataset.
+   Lower ε → more noise → lower accuracy → stronger privacy guarantee.
+
+Training non-DP baseline for honest accuracy comparison…
+Non-DP baseline accuracy: 54.8%  (trained identically, no noise)
+
+
+⚙️  CompliancePrivacyEngine configured with max_epsilon=8.0
+   check_epsilon() will raise EpsilonBudgetExceeded if ε > 8.0
+   (same hard-stop semantics as FairnessGate.on_epoch_end)
+
+Training for 5 epochs with ε=50.0, δ=1e-05
+
+Epoch  |     Loss |     Acc |        ε | δ
+--------------------------------------------
+
+  [EpsilonBudgetExceeded] ε=26.0 > max_epsilon=8.0
+  → In production: raise and stop training (same as FairnessGate)
+  → Demo continues with enforcement disabled for remaining epochs
+
+  1     |    2.160 |   26.2% |     26.0 | 1e-5  ⚠️  EXCEEDS max=8.0
+  2     |    1.896 |   33.0% |     33.6 | 1e-5  within budget
+  3     |    1.882 |   36.1% |     39.7 | 1e-5  within budget
+  4     |    1.795 |   38.5% |     45.1 | 1e-5  within budget
+  5     |    1.763 |   39.9% |     50.0 | 1e-5  within budget
+
+──────────────────────────────────────────────────────
+  Final epsilon         : 50.0  (⚠️  vacuous at this level)
+  Final accuracy (DP)   : 39.9%
+  Baseline accuracy     : 54.8%  (same model, no noise)
+  Privacy-accuracy cost : 14.9% accuracy gap for ε=50.0
+  max_grad_norm=1.0 means per-sample gradients clipped to L2-norm ≤ 1.0
+  → individual contributions bounded → membership inference harder
+
+Per-class accuracy (DP vs non-DP baseline):
+  Class  |   DP acc |  Baseline |   Drop
+  ──────────────────────────────────────
+  0      |    39.8% |     46.6% |  +6.8%
+  1      |    27.0% |     71.9% | +44.9%
+  2      |    37.0% |     35.0% |  -2.0%
+  3      |    18.4% |     12.6% |  -5.8%
+  4      |    28.9% |     33.3% |  +4.4%
+  5      |    38.4% |     44.2% |  +5.8%
+  6      |    53.6% |     89.3% | +35.7%
+  7      |    36.3% |     62.7% | +26.5%
+  8      |    62.3% |     77.4% | +15.1%
+  9      |    51.4% |     67.9% | +16.5%
+
+Visualization 1 saved → /home/raja/compliance-as-code/pytorch_compliance_as_code/examples/04_opacus_dp/sample_output/dp_budget_gauge.png
+Visualization 2 saved → /home/raja/compliance-as-code/pytorch_compliance_as_code/examples/04_opacus_dp/sample_output/dp_accuracy_tradeoff.png
+
+Total elapsed: 15.6s
+
+=== 05_compliant_dataset ===
+======================================================================
+EXAMPLE 5: Consent-Aware Data Loading — GDPR Articles 6, 7
+======================================================================
+  ⚠️  WARNING: Class imbalance 10.0:1 exceeds 5:1 — EU AI Act Art. 10 data governance
+
+Dataset profile:
+  Samples  : 500
+  Classes  : {0: 200, 1: 150, 2: 80, 3: 50, 4: 20}
+  Max class ratio: 10.0:1
+  ⚠️  WARNING: Class imbalance 10.0:1 exceeds 5:1 — EU AI Act Art. 10 data governance
+
+Loading all samples (per-sample, catching ConsentViolation)…
+
+  Loaded: 485 samples | Denied: 15 samples
+
+Denial log (first 5):
+  subject_025 | purpose=classification | DENIED (consent_withdrawn)
+  subject_030 | purpose=classification | DENIED (consent_withdrawn)
+  subject_038 | purpose=classification | DENIED (consent_withdrawn)
+  subject_049 | purpose=classification | DENIED (consent_withdrawn)
+  subject_078 | purpose=classification | DENIED (consent_withdrawn)
+
+Access log: 485 GRANTED, 15 DENIED
+
+──────────────────────────────────────────────────
+Purpose scoping demo (GDPR Art.7 — consent is purpose-specific):
+  Same registry, but requesting purpose='analytics' instead of 'classification'
+  ⚠️  WARNING: Class imbalance 10.0:1 exceeds 5:1 — EU AI Act Art. 10 data governance
+  purpose='classification': 485 granted, 15 denied
+  purpose='analytics':      287 granted, 213 denied
+  → 198 extra denials when purpose scope changes
+
+Visualization 1 saved → /home/raja/compliance-as-code/pytorch_compliance_as_code/examples/05_compliant_dataset/sample_output/consent_scatter.png
+Visualization 2 saved → /home/raja/compliance-as-code/pytorch_compliance_as_code/examples/05_compliant_dataset/sample_output/class_distribution.png
+
+Total elapsed: 0.5s
+
+=== 06_before_after ===
+/home/raja/compliance-as-code/pytorch_compliance_as_code/examples/06_before_after/run.py:110: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "generated_at": datetime.datetime.utcnow().isoformat(),
+/home/raja/compliance-as-code/pytorch_compliance_as_code/examples/06_before_after/run.py:129: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  print(f"  generated_at: {datetime.datetime.utcnow().isoformat()}")
+/home/raja/compliance-as-code/pytorch_compliance_as_code/examples/06_before_after/run.py:246: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/raja/compliance-as-code/pytorch_compliance_as_code/examples/06_before_after/run.py:246: UserWarning: Glyph 10060 (\N{CROSS MARK}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/raja/compliance-as-code/pytorch_compliance_as_code/examples/06_before_after/run.py:246: UserWarning: Glyph 128308 (\N{LARGE RED CIRCLE}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/raja/compliance-as-code/pytorch_compliance_as_code/examples/06_before_after/run.py:246: UserWarning: Glyph 128994 (\N{LARGE GREEN CIRCLE}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/raja/compliance-as-code/pytorch_compliance_as_code/examples/06_before_after/run.py:248: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
+  plt.savefig(out_path, dpi=120, bbox_inches="tight")
+/home/raja/compliance-as-code/pytorch_compliance_as_code/examples/06_before_after/run.py:248: UserWarning: Glyph 10060 (\N{CROSS MARK}) missing from font(s) DejaVu Sans.
+  plt.savefig(out_path, dpi=120, bbox_inches="tight")
+/home/raja/compliance-as-code/pytorch_compliance_as_code/examples/06_before_after/run.py:248: UserWarning: Glyph 128308 (\N{LARGE RED CIRCLE}) missing from font(s) DejaVu Sans.
+  plt.savefig(out_path, dpi=120, bbox_inches="tight")
+/home/raja/compliance-as-code/pytorch_compliance_as_code/examples/06_before_after/run.py:248: UserWarning: Glyph 128994 (\N{LARGE GREEN CIRCLE}) missing from font(s) DejaVu Sans.
+  plt.savefig(out_path, dpi=120, bbox_inches="tight")
+======================================================================
+EXAMPLE 6: Before vs After — What compliance adds to PyTorch
+======================================================================
+
+──────────────────────────────────────────────────────────────────────
+BEFORE: Standard PyTorch (what everyone does today)
+──────────────────────────────────────────────────────────────────────
+
+Standard checkpoint contents:
+  state_dict: 11,689,512 parameters
+  That's it. No audit trail. No consent record. No fairness score.
+  No model version. No training data hash. No regulatory mapping.
+  A regulator asks "prove this model is fair" — you have nothing.
+
+──────────────────────────────────────────────────────────────────────
+AFTER: Compliant PyTorch (what torchcomply adds)
+──────────────────────────────────────────────────────────────────────
+
+Fine-tuning for 2 steps (so audit chain covers real training passes)…
+
+Compliant checkpoint contents:
+  state_dict: 11,689,512 parameters
+  audit_chain: 180 entries, chain VALID ✅
+  chain_root_hash: 1315f32c073f2530…  ← single fingerprint for chain integrity
+  fairness_parity: 0.0400 (threshold=0.15) → PASSED ✅
+  model_architecture: auto-introspected (ResNet)
+  regulations: [eu_ai_act, gdpr]
+  generated_at: 2026-04-05T07:34:55.537617
+  A regulator asks "prove this model is fair" — you hand them this file.
+
+Note: checkpoint stores audit_chain_summary (compact). Full entry log:
+  → audit_chain.jsonl  (353,695 bytes)
+
+────────────────────────────────────────
+  Standard checkpoint:  46.8 MB
+  Compliant checkpoint: 46.8 MB  (overhead: 1 KB)
+
+Visualization saved → /home/raja/compliance-as-code/pytorch_compliance_as_code/examples/06_before_after/sample_output/before_after_comparison.png
+Total elapsed: 4.6s
+
+=== 06_full_pipeline_v1 ===
+Skipping import of cpp extensions due to incompatible torch version 2.11.0+cu130 for torchao version 0.16.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+======================================================================
+TORCHCOMPLY — Full Compliance Pipeline
+PyTorch Conference Europe 2026 | Station F, Paris | April 8
+======================================================================
+
+Device: CUDA
+Loading weights:   0%|          | 0/104 [00:00<?, ?it/s]Loading weights: 100%|██████████| 104/104 [00:00<00:00, 2608.62it/s]
+
+Loading IMDB test[:200]…
+Running compliant inference on 200 IMDB reviews…
+
+Computing Captum attributions for 3 representative reviews…
+  'I love sci-fi and am willing to put up with a lot.…' → POSITIVE | top: [SEP], tv, to
+  'OK, so my summary line is a cheap trick. But the m…' → POSITIVE | top: praised, ##ly, absurd
+  '"Cover Girl" is a lacklustre WWII musical with abs…' → NEGATIVE | top: [SEP], nothing, wwii
+
+Generating Annex IV PDF report → /home/raja/compliance-as-code/pytorch_compliance_as_code/examples/06_full_pipeline_v1/sample_output/compliance_report.pdf
+
+╔══════════════════════════════════════════════════════════════╗
+║            COMPLIANCE PIPELINE SUMMARY                       ║
+╠══════════════════════════════════════════════════════════════╣
+║  Model:         DistilBERT (66M params)                      ║
+║  Dataset:       IMDB (200 reviews)                           ║
+║  Hardware:      CUDA                                          ║
+║  Regulations:   EU AI Act, GDPR                              ║
+║                                                              ║
+║  Audit Trail:   13936 entries  |  Chain: ✅ VALID              ║
+║  Fairness:      Parity 0.023  |  ✅ PASSED                  ║
+║  Consent:       190   granted  |  10    denied               ║
+║  Captum:        3 explanations logged                        ║
+║                                                              ║
+║  Report:        compliance_report.pdf                        ║
+║  Pipeline Time: 19.2  s                              ║
+║                                                              ║
+║  Status:        READY FOR REGULATORY REVIEW ✅               ║
+╚══════════════════════════════════════════════════════════════╝
+
+Summary saved → /home/raja/compliance-as-code/pytorch_compliance_as_code/examples/06_full_pipeline_v1/sample_output/pipeline_summary.txt
+Visualization saved → /home/raja/compliance-as-code/pytorch_compliance_as_code/examples/06_full_pipeline_v1/sample_output/coverage_radar.png
+
+=== 07_crypten_secure ===
+======================================================================
+EXAMPLE 7: Encrypted Inference — CrypTen (Secure Multi-Party Computation)
+GDPR Article 25: Data protection by design and by default
+======================================================================
+
+Device: CUDA
+
+Note: This demo uses single-machine CrypTen simulation (world_size=1).
+  Real MPC requires network-isolated processes on separate machines/containers.
+  CrypTen is running on CPU (CUDA disabled — MPC requires CPU for correct IPC).
+
+Model: 3-layer MLP (20→128→128→10), 20,490 parameters
+
+Standard inference:   output[:3]=[1.9256553649902344, 2.496548652648926, 1.2565193176269531], time=6.28ms
+Encrypted inference:  output[:3]=[1.92535400390625, 2.496063232421875, 1.2563629150390625], time=17.0ms
+
+Max absolute difference: 0.000878 (numerical noise from MPC)
+Overhead: 3x slower
+Privacy guarantee: model NEVER saw plaintext input
+
+Secure inference log:
+  Protocol:         SecretShare_MPC
+  Input shape:      (1, 20)
+  Encryption time:  17.0ms
+  MPC coverage:     ✅ All layers ran encrypted
+
+Visualization saved → /home/raja/compliance-as-code/pytorch_compliance_as_code/examples/07_crypten_secure/sample_output/crypten_comparison.png
+Total elapsed: 2.4s
+
+=== 08_three_mechanisms ===
+======================================================================
+EXAMPLE 8: Three PyTorch Mechanisms for Compliance
+Abstract claim: "Dispatcher, custom Autograd functions, and the hook system"
+======================================================================
+
+Subject IDs (hashed for GDPR Art.17): ['sub_fe3cc27c1403', 'sub_7e1732273120', 'sub_a3c86f4c5b95', 'sub_1ef49392c2fb', 'sub_167ab411965b']
+
+═══ MECHANISM 1: Forward Hooks (register_forward_hook) ═══
+Use case: Audit logging — EU AI Act Article 12
+Hook audit trail: 15 entries recorded
+  #0    0                                        Linear       (5, 32)          ec339d45…
+  #7    1                                        ReLU         (5, 32)          6d4afb8d…
+  #14   2                                        Linear       (5, 2)           3f66af24…
+✅ Chain integrity verified
+
+═══ MECHANISM 2: Dispatcher (__torch_function__) ═══
+Use case: Operator-level monitoring — invisible to model code
+Dispatcher log: 3 tensor operations intercepted
+  linear: 2 calls
+  relu: 1 call
+This logging required ZERO changes to model code
+
+═══ MECHANISM 3: Custom Autograd Function (ProvenanceLinear) ═══
+Use case: Data provenance through backpropagation — GDPR Article 17
+Provenance log: 1 gradient update tracked
+  Gradient influenced by subjects (hashed IDs): ['sub_fe3cc27c1403', 'sub_7e1732273120', 'sub_a3c86f4c5b95', 'sub_1ef49392c2fb', 'sub_167ab411965b']
+  Gradient norm: 12.6491
+
+If 'sub_fe3cc27c1403' requests erasure (GDPR Art. 17), we know exactly
+which gradients their data influenced — enabling targeted unlearning.
+
+Note: 'Experimental' means ProvenanceLinear only covers layers *explicitly*
+  wrapped with it. Upstream layers use standard autograd — their provenance
+  is NOT tracked. Full graph coverage would require wrapping every layer,
+  which is currently impractical for deep models.
+
+Three mechanisms demonstrated:
+  Hooks:      Module-level audit logging  (15 entries — production-ready)
+  Dispatcher: Operator-level monitoring   (3 ops — zero model changes)
+  Autograd:   Gradient provenance tracking (1 records — experimental)
+All three use NATIVE PyTorch APIs. No framework modifications needed.
+
+Abstract claim: "Dispatcher, custom Autograd functions, and the hook system"
+  ✅ Hooks:      15 entries, root_hash=3f66af244af6…
+  ✅ Dispatcher: 3 ops intercepted, 0 model changes
+  ✅ Autograd:   1 gradient provenance records
+
+Visualization saved → /home/raja/compliance-as-code/pytorch_compliance_as_code/examples/08_three_mechanisms/sample_output/three_mechanisms.png
+Total elapsed: 1.4s
+
+=== 09_deployment_monitor ===
+======================================================================
+EXAMPLE 9: Deployment Monitoring — EU AI Act Articles 9, 14, 15
+Bias drift detection over 1000 simulated inference requests
+======================================================================
+
+Device: CUDA
+
+Loading CIFAR-10 for class-based concept drift simulation…
+  Pre-drift pool:  700 vehicle images (classes 0,1,8,9)
+  Post-drift pool: 300 animal images (classes 2-7)
+
+Simulating 1000 requests in 20 batches of 50…
+Drift at request 700: domain shifts from vehicles → animals
+
+Batch   |  Entropy |  Top-3 conc |  HumanReview | Status
+──────────────────────────────────────────────────────────────
+  1     |    4.450 |       0.276 |           33 | ✅ OK
+  2     |    4.125 |       0.332 |           29 | ✅ OK
+  3     |    4.229 |       0.337 |           32 | ✅ OK
+  4     |    4.066 |       0.363 |           33 | ✅ OK
+  5     |    3.772 |       0.431 |           29 | ✅ OK
+  6     |    3.731 |       0.418 |           25 | ✅ OK
+  7     |    3.946 |       0.382 |           30 | ✅ OK
+  8     |    4.119 |       0.366 |           28 | ✅ OK
+  9     |    4.165 |       0.349 |           28 | ✅ OK
+  10    |    3.905 |       0.403 |           21 | ✅ OK
+  11    |    3.635 |       0.451 |           21 | ✅ OK
+  12    |    3.666 |       0.430 |           23 | ✅ OK
+  13    |    4.043 |       0.366 |           30 | ✅ OK
+  14    |    3.684 |       0.433 |           20 | ✅ OK
+  15    |    5.030 |       0.125 |           39 | ⚠️  DRIFT
+     ⚠️  ENTROPY DRIFT at batch 15 (req 701+) — entropy 5.030 > 4.7
+        Domain shift: vehicles → animals | model becomes uncertain
+        Action: routing next 50 requests to human review
+  [ALERT] batch=15 metric=entropy value=5.030 > threshold=4.7
+  [ALERT] → In production: stop serving / page oncall / switch fallback model
+  16    |    5.112 |       0.130 |           41 | ⚠️  DRIFT
+  17    |    4.926 |       0.198 |           35 | ⚠️  DRIFT
+  18    |    4.997 |       0.163 |           41 | ⚠️  DRIFT
+  19    |    5.202 |       0.108 |           42 | ⚠️  DRIFT
+  20    |    4.902 |       0.161 |           40 | ⚠️  DRIFT
+
+──────────────────────────────────────────────────────────────
+Deployment monitoring summary:
+  Total requests:              1000
+  Batches monitored:           20
+  Drift detected:              batch 15 (request 700+)
+  Human reviews routed:        620 (confidence < 0.5)
+  Entropy change after drift:  +26.8% (↑ increase)
+  Note: entropy measures prediction spread — not accuracy.
+  Accuracy requires ground-truth labels; this is a confidence distribution metric.
+
+Visualization 1 saved → /home/raja/compliance-as-code/pytorch_compliance_as_code/examples/09_deployment_monitor/sample_output/bias_drift.png
+Visualization 2 saved → /home/raja/compliance-as-code/pytorch_compliance_as_code/examples/09_deployment_monitor/sample_output/human_interventions.png
+
+Total elapsed: 11.5s
+
+=== 10_connected_pipeline ===
+/home/raja/.venv/lib/python3.12/site-packages/opacus/privacy_engine.py:96: UserWarning: Secure RNG turned off. This is perfectly fine for experimentation as it allows for much faster training performance, but remember to turn it on and retrain one last time before production with ``secure_mode`` turned on.
+  warnings.warn(
+sys:1: UserWarning: Full backward hook is firing when gradients are computed with respect to module outputs since no inputs require gradients. See https://docs.pytorch.org/docs/main/generated/torch.nn.Module.html#torch.nn.Module.register_full_backward_hook for more details.
+══════════════════════════════════════════════════════════════════════
+TORCHCOMPLY — End-to-End Compliance Pipeline
+All three tools: Opacus + Captum + CrypTen
+All three mechanisms: Hooks + Dispatcher + Autograd
+PyTorch Conference Europe 2026 | Station F, Paris
+══════════════════════════════════════════════════════════════════════
+
+Stage 1 ✅: 450 samples loaded, 50 denied (2 subjects opted out)
+Stage 2 ✅: Compliance hooks registered on 3 modules
+           (context manager API — hooks removed automatically on exit)
+Stage 3 ✅: DP training complete, ε=4.7
+Stage 4 ✅: Fairness check ✅ PASSED, parity=0.061 threshold=0.15
+Stage 5 ✅: 3 IntegratedGradients explanations generated
+  Sample 0: top features [1, 7, 6], pred=0
+  Sample 1: top features [1, 0, 8], pred=0
+  Sample 2: top features [0, 1, 2], pred=0
+Stage 6 ✅: Encrypted inference verified, max diff=0.000096, overhead=18x
+Stage 7 ✅: Audit chain 108 entries, integrity VALID
+         root_hash=f61d14289ea2de04… | persisted → audit_chain.jsonl
+Stage 8 ✅: Annex IV report generated → /home/raja/compliance-as-code/pytorch_compliance_as_code/examples/10_connected_pipeline/sample_output/compliance_report.pdf
+Stage 9 ✅: MLflow run logged — fairness, audit summary, DP params
+         run_id=a7645fe698404671a3414d5d431bde68
+         Verify: mlflow ui  →  http://localhost:5000/#/experiments/1/runs/a7645fe698404671a3414d5d431bde68
+Stage 10 ✅: OpenTelemetry — 4 spans emitted (fairness_check, audit_chain_verify, annex_iv_report, compliance_pipeline)
+
+╔══════════════════════════════════════════════════════════════════╗
+║            END-TO-END COMPLIANCE PIPELINE COMPLETE               ║
+╠══════════════════════════════════════════════════════════════════╣
+║  Model:          MLP (10→32→2), 418   params                  ║
+║  Dataset:        500 samples, 50 subjects opted out               ║
+║  Hardware:       CUDA                                                  ║
+║  Regulations:    EU AI Act, GDPR                                 ║
+║                                                                  ║
+║  ── Tools Connected ─────────────────────────────────────────── ║
+║  Opacus:         DP-SGD, ε=4.7                         ✅         ║
+║  Captum:         3 IntegratedGradients explanations   ✅         ║
+║  CrypTen:        Encrypted inference verified         ✅         ║
+║  MLflow:         Fairness + audit + DP metrics        ✅         ║
+║  OpenTelemetry:  Compliance spans emitted             ✅         ║
+║                                                                  ║
+║  ── Compliance Metrics ──────────────────────────────────────── ║
+║  Audit Trail:    108   entries | root_hash=f61d14289ea2de04…  ║
+║  Fairness:       Parity 0.061 | Threshold 0.15 | ✅ PASSED    ║
+║  Consent:        450   granted | 50    denied             ║
+║  Explanations:   3 samples explained                             ║
+║  Stages logged:  9/10 to compliance_record                  ║
+║                                                                  ║
+║  ── Artifacts ───────────────────────────────────────────────── ║
+║  Report:         compliance_report.pdf                           ║
+║  Audit log:      audit_chain.jsonl  (full entry log)             ║
+║  Pipeline Time:  5.5   s                                        ║
+║                                                                  ║
+║  Status:         READY FOR REGULATORY REVIEW ✅                  ║
+╚══════════════════════════════════════════════════════════════════╝
+
+╔═════════════════════════════════════════════════════════════════════════════╗
+║                               COMPLIANCE DIFF                               ║
+║                    previous_run  →  connected_pipeline_demo                 ║
+╠═════════════════════════════════════════════════════════════════════════════╣
+  Metric                 │             Before │              After │     Status
+───────────────────────────────────────────────────────────────────────────────
+  run_id                 │       previous_run │ connected_pipeline_demo │           
+  audit_entries          │                 88 │                108 │           
+  audit_root_hash        │            abc123… │      f61d14289ea2… │           
+  fairness_parity        │             0.0511 │             0.0611 │       ✅ OK
+  fairness_passed        │                  ✅ │                  ✅ │       ✅ OK
+  epsilon (ε)            │             4.2254 │             4.6949 │       ✅ OK
+  drift_detected         │                  ❌ │                  ❌ │       ✅ OK
+───────────────────────────────────────────────────────────────────────────────
+  ✅ No regressions detected
+╚═════════════════════════════════════════════════════════════════════════════╝
+Compliance snapshot saved → /home/raja/compliance-as-code/pytorch_compliance_as_code/examples/10_connected_pipeline/sample_output/compliance_snapshot.json
+  (Pass to next run's ComplianceDiff to detect regressions)
+
+Visualization 1 saved → /home/raja/compliance-as-code/pytorch_compliance_as_code/examples/10_connected_pipeline/sample_output/pipeline_timeline.png
+Visualization 2 saved → /home/raja/compliance-as-code/pytorch_compliance_as_code/examples/10_connected_pipeline/sample_output/coverage_radar.png
+
+Total elapsed: 5.5s
+
+=== 11_llm_finetune ===
+Skipping import of cpp extensions due to incompatible torch version 2.11.0+cu130 for torchao version 0.16.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+======================================================================
+EXAMPLE 11: LLM Fine-Tuning with Compliance
+Model: DistilGPT-2 (82M params) + LoRA (PEFT)
+======================================================================
+
+Device: CUDA
+
+Loading distilgpt2…
+Loading weights:   0%|          | 0/76 [00:00<?, ?it/s]Loading weights: 100%|██████████| 76/76 [00:00<00:00, 1712.26it/s]
+bitsandbytes library load error: libnvJitLink.so.13: cannot open shared object file: No such file or directory
+Traceback (most recent call last):
+  File "/home/raja/.venv/lib/python3.12/site-packages/bitsandbytes/cextension.py", line 320, in <module>
+    lib = get_native_library()
+          ^^^^^^^^^^^^^^^^^^^^
+  File "/home/raja/.venv/lib/python3.12/site-packages/bitsandbytes/cextension.py", line 298, in get_native_library
+    dll = ct.cdll.LoadLibrary(str(binary_path))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/ctypes/__init__.py", line 460, in LoadLibrary
+    return self._dlltype(name)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/ctypes/__init__.py", line 379, in __init__
+    self._handle = _dlopen(self._name, mode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: libnvJitLink.so.13: cannot open shared object file: No such file or directory
+/home/raja/.venv/lib/python3.12/site-packages/peft/tuners/lora/layer.py:2285: UserWarning: fan_in_fan_out is set to False but the target module is `Conv1D`. Setting fan_in_fan_out to True.
+  warnings.warn(
+`loss_type=None` was set in the config but it is unrecognized. Using the default loss: `ForCausalLMLoss`.
+The attention mask is not set and cannot be inferred from input because pad token is same as eos token. As a consequence, you may observe unexpected behavior. Please pass your input's `attention_mask` to obtain reliable results.
+/home/raja/compliance-as-code/pytorch_compliance_as_code/examples/11_llm_finetune/run.py:419: UserWarning: Glyph 128274 (\N{LOCK}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/raja/compliance-as-code/pytorch_compliance_as_code/examples/11_llm_finetune/run.py:419: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/raja/compliance-as-code/pytorch_compliance_as_code/examples/11_llm_finetune/run.py:421: UserWarning: Glyph 128274 (\N{LOCK}) missing from font(s) DejaVu Sans.
+  plt.savefig(out_path, dpi=120, bbox_inches="tight")
+/home/raja/compliance-as-code/pytorch_compliance_as_code/examples/11_llm_finetune/run.py:421: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
+  plt.savefig(out_path, dpi=120, bbox_inches="tight")
+LoRA applied: 405,504 trainable / 82,318,080 total (0.49%)
+
+Consent: denied authors (randomly selected, seed=99): ['author_005', 'author_006', 'author_007', 'author_012', 'author_019']
+
+Training for 3 epochs on 30 samples (10 denied)…
+
+Epoch  |     Loss |  Audit entries |  Consent denied
+────────────────────────────────────────────────────
+  1     |    8.876 |            452 |              10
+  2     |    7.917 |            904 |              10
+  3     |    6.086 |           1356 |              10
+
+Generated text:
+  The most important principle of AI safety is that AI and its users will have the ability to achieve better outcomes in the long run. In the future, this will be achieved through a combination of
+
+Captum top-5 attributed prompt tokens:
+  'is' (-52.591)
+  'of' (+11.087)
+  'most' (+9.245)
+  'principle' (+7.757)
+  'AI' (+7.697)
+
+LLM Compliance Summary:
+  Base model:      distilgpt2 (82,318,080 params)
+  Adapter:         LoRA (rank=8, alpha=16)
+  Trainable:       0.49% of params
+  Training:        3 epochs on 30 samples
+  Audit trail:     5311 entries
+  Consent:         30 granted, 10 denied
+  Report:          /home/raja/compliance-as-code/pytorch_compliance_as_code/examples/11_llm_finetune/sample_output/compliance_report.pdf
+
+Visualization saved → /home/raja/compliance-as-code/pytorch_compliance_as_code/examples/11_llm_finetune/sample_output/lora_compliance_card.png
+Total elapsed: 22.4s
+

@@ -1,0 +1,70 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.0.2, pluggy-1.6.0 -- /home/raja/.venv/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/raja/compliance-as-code/pytorch_compliance_as_code
+configfile: pyproject.toml
+plugins: anyio-4.13.0, cov-7.0.0, typeguard-4.5.1
+collecting ... collected 37 items
+
+torchcomply/tests/test_annex_iv.py::test_model_introspector PASSED       [  2%]
+torchcomply/tests/test_annex_iv.py::test_pdf_generated PASSED            [  5%]
+torchcomply/tests/test_audit.py::test_chain_creation PASSED              [  8%]
+torchcomply/tests/test_audit.py::test_hook_registration PASSED           [ 10%]
+torchcomply/tests/test_audit.py::test_chain_integrity PASSED             [ 13%]
+torchcomply/tests/test_audit.py::test_tamper_detection PASSED            [ 16%]
+torchcomply/tests/test_audit.py::test_json_serialization PASSED          [ 18%]
+torchcomply/tests/test_audit.py::test_summary_keys PASSED                [ 21%]
+torchcomply/tests/test_autograd_provenance.py::test_provenance_log_populated PASSED [ 24%]
+torchcomply/tests/test_autograd_provenance.py::test_provenance_log_has_subject_ids PASSED [ 27%]
+torchcomply/tests/test_autograd_provenance.py::test_provenance_log_has_grad_norm PASSED [ 29%]
+torchcomply/tests/test_autograd_provenance.py::test_forward_numerically_correct PASSED [ 32%]
+torchcomply/tests/test_autograd_provenance.py::test_clear_log PASSED     [ 35%]
+torchcomply/tests/test_captum.py::test_text_explanation PASSED           [ 37%]
+torchcomply/tests/test_captum.py::test_explanation_report PASSED         [ 40%]
+torchcomply/tests/test_crypten_bridge.py::test_secure_predict_shape PASSED [ 43%]
+torchcomply/tests/test_crypten_bridge.py::test_output_close_to_standard PASSED [ 45%]
+torchcomply/tests/test_crypten_bridge.py::test_inference_log_populated PASSED [ 48%]
+torchcomply/tests/test_dataset.py::test_consent_granted PASSED           [ 51%]
+torchcomply/tests/test_dataset.py::test_consent_denied PASSED            [ 54%]
+torchcomply/tests/test_dataset.py::test_access_log_summary PASSED        [ 56%]
+torchcomply/tests/test_dataset.py::test_dataset_profile_imbalance PASSED [ 59%]
+torchcomply/tests/test_dataset.py::test_len PASSED                       [ 62%]
+torchcomply/tests/test_dispatcher_hooks.py::test_log_captures_matmul PASSED [ 64%]
+torchcomply/tests/test_dispatcher_hooks.py::test_log_has_required_fields PASSED [ 67%]
+torchcomply/tests/test_dispatcher_hooks.py::test_model_forward_logged PASSED [ 70%]
+torchcomply/tests/test_dispatcher_hooks.py::test_clear_log PASSED        [ 72%]
+torchcomply/tests/test_dispatcher_hooks.py::test_output_numerically_correct PASSED [ 75%]
+torchcomply/tests/test_fairness.py::test_parity_computation_perfect PASSED [ 78%]
+torchcomply/tests/test_fairness.py::test_parity_computation_known PASSED [ 81%]
+torchcomply/tests/test_fairness.py::test_gate_passes PASSED              [ 83%]
+torchcomply/tests/test_fairness.py::test_gate_blocks PASSED              [ 86%]
+torchcomply/tests/test_fairness.py::test_log_recording PASSED            [ 89%]
+torchcomply/tests/test_opacus.py::test_wrapper_creation PASSED           [ 91%]
+torchcomply/tests/test_opacus.py::test_epsilon_tracking PASSED           [ 94%]
+torchcomply/tests/test_opacus.py::test_step_counter PASSED               [ 97%]
+torchcomply/tests/test_opacus.py::test_log_to_dict PASSED                [100%]
+
+=============================== warnings summary ===============================
+torchcomply/tests/test_captum.py::test_text_explanation
+  /home/raja/.venv/lib/python3.12/site-packages/torchao/dtypes/uintx/__init__.py:1: DeprecationWarning: Importing from torchao.dtypes.uintx.dyn_int8_act_int4_wei_cpu_layout is deprecated. Please use 'from torchao.prototype.dtypes import Int8DynamicActInt4WeightCPULayout' instead. This import path will be removed in a future release of torchao. See https://github.com/pytorch/ao/issues/2752 for more details.
+    from .dyn_int8_act_int4_wei_cpu_layout import (
+
+torchcomply/tests/test_captum.py::test_text_explanation
+  /home/raja/.venv/lib/python3.12/site-packages/torchao/dtypes/uintx/__init__.py:22: DeprecationWarning: Importing from torchao.dtypes.uintx.uintx_layout is deprecated. Please use 'from torchao.prototype.dtypes import UintxLayout, UintxTensor' instead. This import path will be removed in a future release of torchao. See https://github.com/pytorch/ao/issues/2752 for more details.
+    from .uintx_layout import (
+
+torchcomply/tests/test_captum.py::test_text_explanation
+  /home/raja/.venv/lib/python3.12/site-packages/torchao/dtypes/__init__.py:23: DeprecationWarning: Importing BlockSparseLayout from torchao.dtypes is deprecated. Please use 'from torchao.prototype.dtypes import BlockSparseLayout' instead. This import path will be removed in a future torchao release. Please check issue: https://github.com/pytorch/ao/issues/2752 for more details. 
+    from .uintx.block_sparse_layout import BlockSparseLayout
+
+torchcomply/tests/test_captum.py::test_text_explanation
+  /home/raja/.venv/lib/python3.12/site-packages/transformers/models/bert/tokenization_bert.py:104: DeprecationWarning: Deprecated in 0.9.0: WordPiece.__init__ will not create from files anymore, try `WordPiece.from_file` instead
+    self._tokenizer = Tokenizer(WordPiece(self._vocab, unk_token=str(unk_token)))
+
+torchcomply/tests/test_crypten_bridge.py::test_output_close_to_standard
+torchcomply/tests/test_crypten_bridge.py::test_inference_log_populated
+  /home/raja/.venv/lib/python3.12/site-packages/crypten/__init__.py:64: RuntimeWarning: CrypTen is already initialized.
+    warnings.warn("CrypTen is already initialized.", RuntimeWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 37 passed, 6 warnings in 9.92s ========================

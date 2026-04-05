@@ -1,0 +1,82 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pytorch-compliance-as-code"
+version = "0.4.0"
+description = "Compliance-as-Code toolkit for PyTorch — EU AI Act / GDPR static analysis pipeline and runtime enforcement"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    # --- static analysis pipeline (pytorch-compliance-toolkit) ---
+    "rdflib>=7.0",
+    "pyyaml>=6.0",
+    "requests>=2.31",
+    "nbformat>=5.9",
+    "python-pptx>=0.6",
+    "faiss-cpu>=1.7",
+    # --- runtime compliance library (torchcomply) ---
+    "torch>=2.2",
+    "torchvision>=0.17",
+    "torchaudio>=2.2",
+    "transformers>=4.40",
+    "datasets>=2.18",
+    "captum>=0.7",
+    "opacus>=1.4",
+    "accelerate>=0.27",
+    "opentelemetry-api>=1.22",
+    "opentelemetry-sdk>=1.22",
+    "mlflow>=2.10",
+    "reportlab>=4.0",
+    "pillow>=10.0",
+    "matplotlib>=3.7",
+    "seaborn>=0.13",
+    "scikit-learn>=1.4",
+    "pandas>=2.0",
+    "numpy>=1.26",
+    "tqdm>=4.66",
+    "jsonschema>=4.21",
+    "peft>=0.10",
+    "trl>=0.8",
+]
+
+# CrypTen MPC — install separately if available on the platform:
+#   pip install crypten --no-build-isolation
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "black>=24.0",
+    "ruff>=0.3",
+    "ipython>=8.0",
+]
+
+[project.scripts]
+pct = "src.cli:main"
+torchcomply = "torchcomply.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*", "torchcomply*"]
+
+# ---------------------------------------------------------------------------
+# pytest configuration
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+testpaths = ["tests", "torchcomply/tests"]
+addopts = "-v --tb=short --strict-markers"
+markers = [
+    "integration: marks tests that require the full PyTorch repo (deselect with -m 'not integration')",
+    "slow: marks tests that take > 10 seconds",
+    "gpu: marks tests requiring a CUDA GPU",
+]
+minversion = "7.0"
+
+# ---------------------------------------------------------------------------
+# black configuration
+# ---------------------------------------------------------------------------
+[tool.black]
+line-length = 100
+target-version = ["py310", "py311", "py312"]

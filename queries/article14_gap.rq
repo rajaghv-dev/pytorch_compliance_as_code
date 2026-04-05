@@ -1,0 +1,22 @@
+# article14_gap.rq
+# Art. 14 (Human Oversight) gap analysis.
+# High-risk AI systems must allow human intervention. This query finds
+# any PyTorch entities that could support Art.14 obligations.
+#
+# Expected result: near-zero or zero rows — PyTorch is a framework, not an
+# AI system operator, so Art.14 compliance is the deployer's responsibility.
+# Use this query to document the gap for auditors.
+
+PREFIX ptc: <https://pytorch-compliance.org/ontology#>
+PREFIX eu:  <https://eu-ai-act.org/ontology#>
+
+SELECT ?entity ?name ?entityType ?mappingConf ?rationale
+WHERE {
+    ?entity ptc:implements        eu:Art14 ;
+            ptc:entityName        ?name ;
+            ptc:entityType        ?entityType ;
+            ptc:mappingConfidence ?mappingConf .
+
+    OPTIONAL { ?entity ptc:mappingRationale ?rationale }
+}
+ORDER BY DESC(?mappingConf)

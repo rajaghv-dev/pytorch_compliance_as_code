@@ -1,0 +1,41 @@
+{
+  "name": "pytorch-compliance-as-code",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11-bullseye",
+
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+
+  "postCreateCommand": "bash .devcontainer/post_create.sh",
+
+  "forwardPorts": [5000, 8888],
+  "portsAttributes": {
+    "5000": { "label": "MLflow UI", "onAutoForward": "notify" },
+    "8888": { "label": "Jupyter", "onAutoForward": "notify" }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-toolsai.jupyter"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  },
+
+  "remoteEnv": {
+    "CUDA_VISIBLE_DEVICES": "",
+    "TOKENIZERS_PARALLELISM": "false",
+    "MPLBACKEND": "Agg"
+  },
+
+  "hostRequirements": {
+    "memory": "8gb",
+    "storage": "32gb"
+  }
+}
